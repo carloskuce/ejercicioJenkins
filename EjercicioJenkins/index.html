@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<fieldset>
+    <p><h2>Para la funcion y = ax^2 + bx +c </h2></p>
+    <div></div>
+    <label for="a">Introduzca el valor de "a":</label>
+    <input type="text" id="a">
+    </div>
+
+    <div>
+        <label for="b">Introduzca el valor de "b":</label>
+        <input type="text" id="b">
+    </div>
+
+    <div>
+        <label for="c">Introduzca el valor de "c":</label>
+        <input type="text" id="c">
+    </div>
+
+    <button id="boton">Enviar </button>
+</fieldset>
+
+
+<fieldset>
+    <div>
+        <p > Para la ecuación: </p><p id="primer"></p>
+        <p>la tabla resultado es:</p>
+
+    </div>
+
+    <div>
+        <table border="1px" id="tabla">
+            <tr id="cabecera">
+                <th>x</th><th>y</th>
+            </tr>
+
+        </table>
+    </div>
+
+</fieldset>
+
+<script type="text/javascript">
+var boton=document.getElementById("boton");
+boton.addEventListener("click",enviarValores);
+var xhReq5=new XMLHttpRequest();
+
+
+
+
+
+function enviarValores(event){
+    var a =document.getElementById("a");
+    var b =document.getElementById("b");
+    var c =document.getElementById("c");
+
+    console.log(xhReq5.readyState);
+    var data={
+        valor1:a.value,
+        valor2:b.value,
+        valor3:c.value
+    };
+    console.log(a.value,b.value,c.value);
+
+    xhReq5.open("POST","backend.php");
+    xhReq5.setRequestHeader("Content-type","application/json;charset=utf-8");
+
+    console.log(xhReq5.readyState);
+
+    xhReq5.onload=recogerValores;
+    xhReq5.send(JSON.stringify(data));
+
+    console.log(JSON.stringify(data));
+    console.log(xhReq5.readyState);
+
+}
+
+function recogerValores(){
+    console.log("status&readyState = " + xhReq5.status + " " + xhReq5.readyState);
+    if ((xhReq5.status=200) && (xhReq5.readyState==4)){
+        console.log("recoger valores "+xhReq5.response);
+    }
+
+
+    console.log("recoger valores estado:" +xhReq5.readyState);
+
+           var array1 = xhReq5.responseText;
+
+            console.log("Array de vuelta"+ array1);
+        if(array1){
+            console.log("Existe array1");
+            imprimirValores(array1);
+        }else{
+            console.log("No existe array1")
+        }
+
+
+}
+
+function imprimirValores(array1){
+    var a =document.getElementById("a");
+    var b =document.getElementById("b");
+    var c =document.getElementById("c");
+    var tabla=document.getElementById("tabla");
+
+    var texto=document.getElementById("primer");
+    texto.innerText =" "+a.value+"x^2 + "+b.value+"x + "+c.value;
+
+    document.getElementById("tabla").innerHTML+=array1;
+
+}
+
+</script>
+</body>
+</html>
